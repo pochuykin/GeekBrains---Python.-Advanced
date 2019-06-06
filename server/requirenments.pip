@@ -1,0 +1,7 @@
+pylint
+autopep8
+ipython
+jupyter
+
+chardet
+pyyaml

@@ -1,0 +1,8 @@
+pylint
+autopep8
+docker-compose
+ipython
+jupyter
+
+chardet
+pyyaml
