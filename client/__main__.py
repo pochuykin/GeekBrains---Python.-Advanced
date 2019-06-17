@@ -4,6 +4,7 @@ import json
 import yaml
 from argparse import ArgumentParser
 import logging
+import hashlib
 
 parser = ArgumentParser()
 parser.add_argument(
@@ -19,16 +20,14 @@ port = 8000
 buffersize = 1024
 encoding = 'utf-8'
 
-logger = logging.getLogger('main')
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-file_handler = logging.FileHandler('.\main.log', encoding='UTF-8')
-
-file_handler.setFormatter(formatter)
-file_handler.setLevel(logging.DEBUG)
-
-logger.addHandler(file_handler)
-logger.addHandler(logging.StreamHandler())
-logger.setLevel(logging.DEBUG)
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('.\main.log', encoding=encoding),
+        logging.StreamHandler()
+    ]
+)
 
 if args.config:
     with open(args.config) as file:
@@ -39,18 +38,24 @@ if args.config:
 try:
     sock = socket.socket()
     sock.connect((host, port))
-    logger.info('Client started')
+    logging.info('Client started')
     action = input('Enter action: ')
     data = input('Enter data: ')
+    hash_obj = hashlib.sha256()
+    hash_obj.update(
+        (str(datetime.now().timestamp()).encode(encoding))
+    )
+
     request = {
         'action': action,
         'data': data,
-        'time': datetime.now().timestamp()
+        'time': datetime.now().timestamp(),
+        'user': hash_obj.hexdigest()
     }
     s_request = json.dumps(request)
-    logger.info(f'{request}')
+    logging.info(f'{request}')
     sock.send(s_request.encode(encoding))
     response = sock.recv(buffersize)
-    logger.info(f'Получен ответ: {response.decode(encoding)}')
+    logging.info(f'Получен ответ: {response.decode(encoding)}')
 except KeyboardInterrupt:
     pass

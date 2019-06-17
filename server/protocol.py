@@ -2,19 +2,18 @@ from datetime import datetime
 import logging
 
 
-logger = logging.getLogger('main')
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-file_handler = logging.FileHandler('.\main.log', encoding='UTF-8')
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('.\main.log', encoding='UTF-8'),
+        logging.StreamHandler()
+    ]
+)
 
-file_handler.setFormatter(formatter)
-file_handler.setLevel(logging.DEBUG)
-
-logger.addHandler(file_handler)
-logger.addHandler(logging.StreamHandler())
-logger.setLevel(logging.DEBUG)
 
 def validate_request(raw):
-    logger.info('validate_request launch')
+    logging.info('validate_request launch')
     request_time = raw.get('time')
     request_action = raw.get('action')
 
@@ -22,7 +21,7 @@ def validate_request(raw):
 
 
 def make_response(request, code, data=None):
-    logger.info('make_response launch')
+    logging.info('make_response launch')
     return {
         'action': request.get('action'),
         'user': request.get('user'),
