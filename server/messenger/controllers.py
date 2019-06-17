@@ -1,2 +1,2 @@
-def send_privete_message(request):
+def send_private_message(request):
     pass

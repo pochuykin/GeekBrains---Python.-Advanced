@@ -1,7 +1,3 @@
-pylint
-autopep8
-ipython
-jupyter
-
-chardet
 pyyaml
+pytest
+pytest-cov
