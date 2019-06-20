@@ -1,4 +1,5 @@
-env/
-.ipynb_checkpoints/
 .idea/
+.ipynb_checkpoints/
+*/.pytest_cahche/
 */__pycache__/
+env/
