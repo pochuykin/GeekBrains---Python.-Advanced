@@ -5,6 +5,7 @@ from argparse import ArgumentParser
 from handlers import handle_default_request
 import logging.config
 from select import select
+import threading
 
 parser = ArgumentParser()
 parser.add_argument(
@@ -41,6 +42,18 @@ if args.config:
 connections = []
 requests = []
 
+
+def read(client, requests, buffersize):
+    b_request = client.recv(buffersize)
+    logger.debug(f'request {b_request} from client {client} added to list')
+    requests.append(b_request)
+
+
+def write(client, response):
+    logger.debug(f'response {response} send to client {client}')
+    client.send(response)
+
+
 try:
     sock = socket.socket()
 
@@ -62,16 +75,15 @@ try:
         rlist, wlist, xlist = select(connections, connections, connections, 0)
 
         for r_client in rlist:
-            b_request = r_client.recv(buffersize)
-            logger.debug(f'request {b_request} from client {r_client} added to list')
-            requests.append(b_request)
+            rthread = threading.Thread(target=read, args=(r_client, requests, buffersize))
+            rthread.start()
 
         while requests:
             b_request = requests.pop()
             b_response = handle_default_request(b_request)
 
             for w_client in wlist:
-                logger.debug(f'response {b_response} send to client {w_client}')
-                w_client.send(b_response)
+                wthread = threading.Thread(target=write, args=(w_client, b_response))
+                wthread.start()
 except KeyboardInterrupt:
     pass
