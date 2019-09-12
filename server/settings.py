@@ -1,4 +1,5 @@
 INSTALLED_APPS = [
     'echo',
-    'messenger'
+    'messenger',
+    'login'
 ]

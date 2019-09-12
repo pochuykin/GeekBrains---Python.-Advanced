@@ -5,7 +5,7 @@ def server():
     local('python server')
 
 
-def client(mode='w'):
+def client(mode='rw'):
     local(f'python client -m {mode}')
 
 
