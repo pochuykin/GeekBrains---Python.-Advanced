@@ -1,0 +1,14 @@
+.idea/
+.ipynb_checkpoints/
+*/.pytest_cahche/
+*/__pycache__/
+env/
+database.db
+docker-compose.yml
+main.log
+sqlite3.exe
+*.lnk
+README.txt
+UI_*/
+
+
