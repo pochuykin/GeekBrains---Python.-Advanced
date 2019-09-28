@@ -13,7 +13,6 @@ logging.basicConfig(
 
 
 def validate_request(raw):
-    logging.info('validate_request launch')
     request_time = raw.get('time')
     request_action = raw.get('action')
 
@@ -21,7 +20,6 @@ def validate_request(raw):
 
 
 def make_response(request, code, data=None):
-    logging.info('make_response launch')
     return {
         'action': request.get('action'),
         'user': request.get('user'),

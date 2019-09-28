@@ -17,7 +17,6 @@ def log(func):
 def login_required(func):
     @wraps(func)
     def wrapper(request, *args, **kwargs):
-        print('login_required' + request.decode())
         if 'user' in request.decode():
             return func(request, *args, **kwargs)
         return make_response(request, 403, 'Access denied')

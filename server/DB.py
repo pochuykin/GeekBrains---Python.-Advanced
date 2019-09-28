@@ -2,9 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3 as lite
-from sqlalchemy import create_engine, Column, ForeignKey, Integer, String, BLOB
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationships, sessionmaker
 import os
 
 name_db = 'database.db'
@@ -16,6 +13,9 @@ class Connect(object):
         self.check_db()
         self.con = lite.connect(name_db)
         #con.row_factory = lite.Row
+
+    def __del__(self):
+        self.con.close()
 
     @staticmethod
     def check_db():
@@ -85,9 +85,11 @@ class Connect(object):
     def check_password(self, login, password):
         detail = self.get_last_user_detail(login)
         if detail is None:
+            # print('Set password for new user')
             self.set_pass_for_user(login, password)
             return True
         else:
+            # print('Check password')
             return password == detail[4]
 
     def set_pass_for_user(self, login, password):
