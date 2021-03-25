@@ -1,2 +1,2 @@
 Kivy==1.11.1
-PyYAML==5.1.2
+PyYAML==5.4
